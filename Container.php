@@ -43,7 +43,7 @@ class Container implements \ArrayAccess
         return new $class;
     }
 
-    function bind($alias, $instance)
+    function alias($alias, $instance)
     {
         if (!is_object($instance)) {
             $instance = $this->create($instance);
