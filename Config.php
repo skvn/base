@@ -2,7 +2,7 @@
 
 namespace Skvn\Base;
 
-class Config
+class Config implements \ArrayAccess
 {
     use Traits\ArrayAccessImpl;
 
