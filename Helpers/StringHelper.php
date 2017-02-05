@@ -4,7 +4,8 @@ namespace Skvn\Base\Helpers;
 
 class StringHelper
 {
-    protected static $snakeCache = [];
+    protected static $snake = [];
+    protected static $studly = [];
 
 
     public static function contains($what, $where)
@@ -32,8 +33,8 @@ class StringHelper
     {
         $key = $value;
 
-        if (isset(static::$snakeCache[$key])) {
-            return static::$snakeCache[$key];
+        if (isset(static::$snake[$key])) {
+            return static::$snake[$key];
         }
 
         if (! ctype_lower($value)) {
@@ -42,7 +43,20 @@ class StringHelper
             $value = strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1-', $value));
         }
 
-        return static::$snakeCache[$key] = $value;
+        return static::$snake[$key] = $value;
+    }
+
+    public static function studly($value)
+    {
+        $key = $value;
+
+        if (isset(static::$studly[$key])) {
+            return static::$studly[$key];
+        }
+
+        $value = ucwords(str_replace(['-', '_'], ' ', $value));
+
+        return static::$studly[$key] = str_replace(' ', '', $value);
     }
 
 
