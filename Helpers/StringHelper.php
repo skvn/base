@@ -59,5 +59,13 @@ class StringHelper
         return static::$studly[$key] = str_replace(' ', '', $value);
     }
 
+    public function classBasename($class)
+    {
+        $class = is_object($class) ? get_class($class) : $class;
+
+        return basename(str_replace('\\', '/', $class));
+    }
+
+
 
 }
