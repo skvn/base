@@ -2,11 +2,16 @@
 
 namespace Skvn\Base\Helpers;
 
-class StringHelper
+class Str
 {
     protected static $snake = [];
     protected static $studly = [];
 
+
+    public static function pos($what, $where)
+    {
+        return strpos($where, $what);
+    }
 
     public static function contains($what, $where)
     {
