@@ -81,22 +81,22 @@ class Console
 
     static function bold($text)
     {
-        return static :: format('bold');
+        return static :: format($text, 'bold');
     }
 
     static function green($text)
     {
-        return static :: format('green');
+        return static :: format($text, 'green');
     }
 
     static function red($text)
     {
-        return static :: format('red');
+        return static :: format($text, 'red');
     }
 
     static function blue($text)
     {
-        return static :: format('blue');
+        return static :: format($text, 'blue');
     }
 
     static function stdout($text)
