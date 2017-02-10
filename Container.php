@@ -4,7 +4,7 @@ namespace Skvn\Base;
 
 class Container implements \ArrayAccess
 {
-    use Traits\ArrayAccessImpl;
+    use Traits\ArrayOrObjectAccessImpl;
 
     protected $instances = [];
     protected $aliases = [];

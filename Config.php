@@ -4,7 +4,7 @@ namespace Skvn\Base;
 
 class Config implements \ArrayAccess
 {
-    use Traits\ArrayAccessImpl;
+    use Traits\ArrayOrObjectAccessImpl;
 
     protected $config = [];
     protected $flatConfig = [];

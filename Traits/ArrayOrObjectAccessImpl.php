@@ -2,7 +2,7 @@
 
 namespace Skvn\Base\Traits;
 
-trait ArrayAccessImpl
+trait ArrayOrObjectAccessImpl
 {
 
     function offsetExists($offset)
@@ -23,6 +23,26 @@ trait ArrayAccessImpl
     function offsetUnset($offset)
     {
         return false;
+    }
+
+    function __get($offset)
+    {
+        return $this->offsetGet($offset);
+    }
+
+    function __isset($offset)
+    {
+        return $this->offsetExists($offset);
+    }
+
+    function __set($offset, $value)
+    {
+        return $this->offsetSet($offset, $value);
+    }
+
+    function __unset($offset)
+    {
+        return $this->offsetUnset($offset);
     }
 
     function get($param)
