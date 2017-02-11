@@ -6,6 +6,7 @@ class Str
 {
     protected static $snake = [];
     protected static $studly = [];
+    protected static $camel = [];
 
 
     public static function pos($what, $where)
@@ -50,6 +51,16 @@ class Str
 
         return static::$snake[$key] = $value;
     }
+
+    public static function camel($value)
+    {
+        if (isset(static::$camel[$value])) {
+            return static::$camel[$value];
+        }
+
+        return static::$camel[$value] = lcfirst(static::studly($value));
+    }
+
 
     public static function studly($value)
     {
