@@ -18,14 +18,15 @@ class Container implements \ArrayAccess
     function __construct()
     {
         if (!is_null(static :: $instance)) {
-            throw new Exceptions\Exception('Only one container instance can be created. User getInstance instead of direct creation.');
+            throw new Exceptions\Exception('Only one container instance can be created. Use getInstance instead of direct creation.');
         }
+        static :: $instance = $this;
     }
 
     static function getInstance()
     {
         if (is_null(static :: $instance)) {
-            static :: $instance = new static();
+            return new static();
         }
         return static :: $instance;
     }
