@@ -2,7 +2,7 @@
 
 namespace Skvn\Base;
 
-class Container implements \ArrayAccess
+abstract class Container implements \ArrayAccess
 {
     use Traits\ArrayOrObjectAccessImpl;
 
@@ -15,20 +15,27 @@ class Container implements \ArrayAccess
     protected static $instance = null;
 
 
-    function __construct()
+    function __construct(...$args)
     {
         if (!is_null(static :: $instance)) {
             throw new Exceptions\Exception('Only one container instance can be created. Use getInstance instead of direct creation.');
         }
         static :: $instance = $this;
+        $this->init(...$args);
     }
+
 
     static function getInstance()
     {
         if (is_null(static :: $instance)) {
-            return new static();
+            throw new Exceptions\Exception('Container instance must be directly created once');
         }
         return static :: $instance;
+    }
+
+    static function instance()
+    {
+        return static :: getInstance();
     }
 
     function make($class)
