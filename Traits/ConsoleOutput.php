@@ -56,6 +56,9 @@ trait ConsoleOutput
 
     function stdout($text)
     {
+        if (is_array($text)) {
+            $text = implode(PHP_EOL, $text);
+        }
         if ($this->consoleHasColors()) {
             if (Str :: contains('<', $text)) {
                 $open = array_map(function($item){return '<' . $item . '>';}, array_keys($this->consoleFormats));
@@ -68,6 +71,15 @@ trait ConsoleOutput
         echo $text . PHP_EOL;
     }
 
+    function success($text)
+    {
+        $this->stdout('<bold><green>' . $text . '</green></bold>');
+    }
+
+    function error($text)
+    {
+        $this->stdout('<bold><red>' . $text . '</red></bold>');
+    }
 
 
 }
