@@ -9,9 +9,16 @@ trait ConsoleOutput
 {
     protected $consoleFormats = [
         'bold' => "\033[1m",
+        'italic' => "\033[3m",
+        'underline' => "\033[4m",
+
         'green' => "\033[32m",
         'red' => "\033[31m",
-        'blue' => "\033[34m"
+        'blue' => "\033[34m",
+        'yellow' => "\033[33m",
+        'purple' => "\033[35m",
+        'cyan' => "\033[36m",
+        'grey' => "\033[37m",
     ];
 
     protected $consoleEndFormat = "\033[0m";
