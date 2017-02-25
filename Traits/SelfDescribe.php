@@ -24,7 +24,8 @@ trait SelfDescribe
                 $name = Str :: snake(substr($method->name, strlen($prefix)));
                 $actions[$name] = [
                     'title' => $this->describeTitle($method->getDocComment()),
-                    'description' => $this->describeDescription($method->getDocComment())
+                    'description' => $this->describeDescription($method->getDocComment()),
+                    'tags' => $this->describeTags($method->getDocComment())
                 ];
             }
         }
