@@ -61,26 +61,4 @@ class ErrorHandler
         throw new Exceptions\Exception($errstr, $params, $errno, 3);
     }
 
-    static function _shutdownHandler()
-    {
-        if (session_id ())
-        {
-            session_write_close();
-        }
-
-        if (!function_exists('error_get_last'))
-        {
-            return;
-        }
-
-        if (!$error = error_get_last())
-        {
-            return;
-        }
-
-        if ($error['type'] & (E_ERROR | E_COMPILE_ERROR))
-        {
-        }
-    }
-
 }
