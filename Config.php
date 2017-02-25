@@ -6,7 +6,7 @@ class Config implements \ArrayAccess
 {
     use Traits\ArrayOrObjectAccessImpl;
 
-    protected $config = [];
+    protected $config = ['__files' => []];
     protected $flatConfig = [];
 
     public function set($key, $value = null)
@@ -41,6 +41,9 @@ class Config implements \ArrayAccess
 
     public function load($filename, $namespace = null)
     {
+        if (array_key_exists($filename, $this->config['__files'])) {
+            return;
+        }
         $parts = explode('.', $filename);
         $ext = array_pop($parts);
 
@@ -54,6 +57,7 @@ class Config implements \ArrayAccess
             default:
                 throw new Exceptions\InvalidArgumentException('Unsupported configuration format in ' . $filename);
         }
+        $this->config['__files'][$filename] = true;
         if (!$this->valid($config)) {
             throw new Exceptions\InvalidArgumentException('Configuration in ' . $filename . ' is missed or invalid');
         }
