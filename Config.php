@@ -8,6 +8,7 @@ class Config implements \ArrayAccess
 
     protected $config = ['__files' => []];
     protected $flatConfig = [];
+    protected $instanceConfig = ['flat' => [], 'arr' => []];
 
     public function set($key, $value = null)
     {
@@ -22,6 +23,10 @@ class Config implements \ArrayAccess
 
     public function get($key, $default = null)
     {
+        if (array_key_exists($key, $this->instanceConfig)) {
+            return $this->instanceConfig[$key];
+        }
+
         if (array_key_exists($key, $this->flatConfig)) {
             return $this->flatConfig[$key];
         }
@@ -37,6 +42,25 @@ class Config implements \ArrayAccess
         }
 
         return $array;
+    }
+
+    function loadInstanceConfig($filename)
+    {
+        $conf = parse_ini_file($filename);
+        $this->instanceConfig['flat'] = $conf;
+        $arr = [];
+        foreach ($conf as $key => $value) {
+            $cur = &$arr;
+            foreach (explode('.', $key) as $segment) {
+                if (!isset($cur[$segment])) {
+                    $cur[$segment] = [];
+                }
+                $cur = &$cur[$segment];
+            }
+            $cur = $value;
+            unset($cur);
+        }
+        $this->instanceConfig['arr'] = $arr;
     }
 
     public function load($filename, $namespace = null)
@@ -66,6 +90,8 @@ class Config implements \ArrayAccess
         if ($namespace) {
             $config = [$namespace => $config];
         }
+
+        $config = array_replace_recursive($config, $this->instanceConfig['arr']);
 
         return $this->set($config);
     }
