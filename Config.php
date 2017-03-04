@@ -5,6 +5,7 @@ namespace Skvn\Base;
 class Config implements \ArrayAccess
 {
     use Traits\ArrayOrObjectAccessImpl;
+    use Traits\AppHolder;
 
     protected $config = ['__files' => []];
     protected $flatConfig = [];

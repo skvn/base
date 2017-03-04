@@ -3,6 +3,7 @@
 namespace Skvn\Base\Helpers;
 
 use Skvn\Base\Exceptions\InvalidArgumentException;
+use Skvn\Base\Exceptions\FilesystemException;
 
 class File
 {
@@ -37,6 +38,42 @@ class File
 
         return $list;
     }
+
+    static function removeDirectory($dir)
+    {
+        if (!is_dir($dir)) {
+            throw new InvalidArgumentException($dir . ' is not a directory');
+        }
+    }
+
+    static function rm($file)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
+        if (!is_dir($file)) {
+            if (!@unlink($file)) {
+                throw new FilesystemException('Failed to remove file ' . $file);
+            }
+            return;
+        }
+        if (!$handle = @opendir($file)) {
+            throw new FilesystemException('Failed to open directory ' . $file);
+        }
+        while (($f = readdir($handle)) !== false) {
+            if ($f == '.' || $f == '..')
+                continue;
+            static :: rm($file . '/' . $f);
+        }
+        closedir($handle);
+        if (!@rmdir($file)) {
+            throw new FilesystemException('Failed to remove directory ' . $file);
+        }
+        clearstatcache();
+        return true;
+    }
+
+
 
 
 }
