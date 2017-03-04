@@ -7,7 +7,7 @@ class Config implements \ArrayAccess
     use Traits\ArrayOrObjectAccessImpl;
     use Traits\AppHolder;
 
-    protected $config = ['__files' => []];
+    protected $config = ['__files' => [], '__env' => []];
     protected $flatConfig = [];
     protected $instanceConfig = ['flat' => [], 'arr' => []];
 
@@ -44,6 +44,29 @@ class Config implements \ArrayAccess
 
         return $array;
     }
+
+    function env($name = null, $value = null, $append = false)
+    {
+        if (is_null($name)) {
+            return $this->config['__env'];
+        }
+        if (!is_null($value)) {
+            if ($append) {
+                if (!isset($this->config['__env'][$name])) {
+                    $this->config['__env'][$name] = [];
+                }
+                if ($append === true) {
+                    $this->config['__env'][$name][] = $value;
+                } else {
+                    $this->config['__env'][$name][$append] = $value;
+                }
+            } else {
+                $this->config['__env'][$name] = $value;
+            }
+        }
+        return $this->config['__env'][$name] ?? null;
+    }
+
 
     function loadInstanceConfig($filename)
     {
