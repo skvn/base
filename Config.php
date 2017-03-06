@@ -2,36 +2,77 @@
 
 namespace Skvn\Base;
 
+use Skvn\Base\Helpers\Str;
+
 class Config implements \ArrayAccess
 {
     use Traits\ArrayOrObjectAccessImpl;
     use Traits\AppHolder;
 
-    protected $config = ['__files' => [], '__env' => []];
-    protected $flatConfig = [];
-    protected $instanceConfig = ['flat' => [], 'arr' => []];
+    protected $config = ['__files' => [], '__env' => [], '__instance' => [], '__flat' => []];
 
     public function set($key, $value = null)
     {
-        $data = is_array($key) ? $key : [$key => $value];
-        foreach ($data as $k => $v) {
-            $this->config[$k] = $v;
+        $target = &$this->config;
+        if (!empty($key) && !is_array($key) && !is_array($value)) {
+            $split = explode('.', $key);
+            $value = [array_pop($split) => $value];
+            $key = implode('.', $split);
         }
-        foreach ($this->flat($data) as $k => $v) {
-            $this->flatConfig[$k] = $v;
+        if (is_array($key) && is_null($value)) {
+            $value = $key;
+            $key = null;
         }
+        if (!empty($key)) {
+            $keys = explode('.', $key);
+            while (count($keys)) {
+                $k = array_shift($keys);
+                if (!isset($target[$k])) {
+                    $target[$k] = [];
+                }
+                $target = &$target[$k];
+            }
+        }
+        $this->config['__flat'] = array_replace($this->config['__flat'], $this->flatten($value, !empty($key) ? $key . '.' : ''));
+        $target = array_replace_recursive($target, $value);
     }
+
+
+
+    protected function flatten(&$array, $prepend = '')
+    {
+        $results = [];
+        if (!is_array($array)) {
+            return [substr($prepend, 0, -1) => $array];
+        }
+
+        foreach ($array as $key => &$value) {
+            if (Str :: pos('__', $key) === 0) {
+                continue;
+            }
+            if (is_array($value) /*&& !empty($value)*/) {
+                $results = array_merge($results, $this->flatten($value, $prepend.$key.'.'));
+            } else {
+                if (Str :: pos('#', $value) === 0) {
+                    $instanceKey = substr($value, 1);
+                    if (isset($this->config['__instance'][$instanceKey])) {
+                        $value = $this->config['__instance'][$instanceKey];
+                        $array[$key] = $this->config['__instance'][$instanceKey];
+                    }
+                }
+                $results[$prepend.$key] = $value;
+            }
+        }
+
+        return $results;
+    }
+
 
     public function get($key, $default = null)
     {
-        if (array_key_exists($key, $this->instanceConfig)) {
-            return $this->instanceConfig[$key];
+        if (array_key_exists($key, $this->config['__flat'])) {
+            return $this->config['__flat'][$key];
         }
-
-        if (array_key_exists($key, $this->flatConfig)) {
-            return $this->flatConfig[$key];
-        }
-
         $array = $this->config;
 
         foreach (explode('.', $key) as $ns) {
@@ -70,21 +111,7 @@ class Config implements \ArrayAccess
 
     function loadInstanceConfig($filename)
     {
-        $conf = parse_ini_file($filename);
-        $this->instanceConfig['flat'] = $conf;
-        $arr = [];
-        foreach ($conf as $key => $value) {
-            $cur = &$arr;
-            foreach (explode('.', $key) as $segment) {
-                if (!isset($cur[$segment])) {
-                    $cur[$segment] = [];
-                }
-                $cur = &$cur[$segment];
-            }
-            $cur = $value;
-            unset($cur);
-        }
-        $this->instanceConfig['arr'] = $arr;
+        $this->config['__instance'] = parse_ini_file($filename);
     }
 
     public function load($filename, $namespace = null)
@@ -110,14 +137,7 @@ class Config implements \ArrayAccess
             throw new Exceptions\InvalidArgumentException('Configuration in ' . $filename . ' is missed or invalid');
         }
 
-
-        if ($namespace) {
-            $config = [$namespace => $config];
-        }
-
-        $config = array_replace_recursive($config, $this->instanceConfig['arr']);
-
-        return $this->set($config);
+        return $this->set($namespace, $config);
     }
 
     protected function valid($value)
@@ -131,19 +151,5 @@ class Config implements \ArrayAccess
         return false;
     }
 
-    protected function flat($array, $prepend = '')
-    {
-        $results = [];
-
-        foreach ($array as $key => $value) {
-            if (is_array($value) && ! empty($value)) {
-                $results = array_merge($results, $this->flat($value, $prepend.$key.'.'));
-            } else {
-                $results[$prepend.$key] = $value;
-            }
-        }
-
-        return $results;
-    }
 
 }
