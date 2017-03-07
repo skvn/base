@@ -55,9 +55,16 @@ class Config implements \ArrayAccess
             } else {
                 if (Str :: pos('#', $value) === 0) {
                     $instanceKey = substr($value, 1);
+                    $default = null;
+                    if (Str :: pos('|', $instanceKey) !== false) {
+                        list($instanceKey, $default) = explode('|', $instanceKey, 2);
+                    }
                     if (isset($this->config['__instance'][$instanceKey])) {
                         $value = $this->config['__instance'][$instanceKey];
                         $array[$key] = $this->config['__instance'][$instanceKey];
+                    } else {
+                        $value = $default;
+                        $array[$key] = $default;
                     }
                 }
                 $results[$prepend.$key] = $value;
