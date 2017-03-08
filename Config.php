@@ -158,5 +158,15 @@ class Config implements \ArrayAccess
         return false;
     }
 
+    function export()
+    {
+        return $this->config;
+    }
+
+    function import($config)
+    {
+        $this->config = $config;
+    }
+
 
 }
