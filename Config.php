@@ -35,6 +35,7 @@ class Config implements \ArrayAccess
         }
         $this->config['__flat'] = array_replace($this->config['__flat'], $this->flatten($value, !empty($key) ? $key . '.' : ''));
         $target = array_replace_recursive($target, $value);
+        return $this;
     }
 
 
