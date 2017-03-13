@@ -5,7 +5,7 @@ namespace Skvn\Base\Helpers;
 
 class Curl
 {
-    function fetch($uri, $params = [])
+    static function fetch($uri, $params = [])
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $uri);
