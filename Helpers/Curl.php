@@ -1,6 +1,6 @@
 <?php
 
-namespace Skcn\Base\Helpers;
+namespace Skvn\Base\Helpers;
 
 
 class Curl
