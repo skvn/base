@@ -17,7 +17,10 @@ class Curl
             CURLOPT_CONNECTTIMEOUT => 3,
             CURLOPT_DNS_CACHE_TIMEOUT => 5
         ];
-        foreach (array_merge($defaults, $params) as $k => $v) {
+        foreach ($params as $k => $v) {
+            $defaults[$k] = $v;
+        }
+        foreach ($defaults as $k => $v) {
             curl_setopt($curl, $k, $v);
         }
         $t = microtime(true);
