@@ -12,6 +12,25 @@ class File
         return self :: findFiles($dir, ['recursive' => false]);
     }
 
+    public static function walkDir($path, $pattern)
+    {
+        $dh = opendir($path);
+        while (($file = readdir($dh)) !== false)
+        {
+            if (substr($file, 0, 1) == '.') continue;
+            $rfile = "{$path}/{$file}";
+            if (is_dir($rfile)) {
+                foreach (self :: walkDir($rfile, $pattern) as $ret) {
+                    yield $ret;
+                }
+            } else {
+                if (fnmatch($pattern, $file)) yield $rfile;
+            }
+        }
+        closedir($dh);
+    }
+
+
     public static function findFiles($dir, $options = [])
     {
         if (!is_dir($dir)) {
