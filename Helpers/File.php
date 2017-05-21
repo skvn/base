@@ -27,6 +27,10 @@ class File
         return true;
     }
 
+    static function safeExists($file)
+    {
+        return @fclose(@fopen($file, "r"));
+    }
 
     public static function ls($dir, $opts = []){
         $options = ['recursive' => false];
