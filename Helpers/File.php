@@ -112,6 +112,47 @@ class File
         return $filename;
     }
 
+    static function cp($src, $dest)
+    {
+        if (!is_dir($src)) {
+            if (!is_dir($dest)) {
+                self :: mkdir(dirname($dest));
+            } else {
+                $dest = $dest . '/' . basename($src);
+            }
+            if (@copy($src, $dest) === false) {
+                throw new FilesystemException('failed to copy file', array('src' => $src, 'dest' => $dest));
+            }
+            return;
+        }
+        self :: mkdir($dest);
+        $items = self :: ls($src);
+
+        $total_items = $items;
+        while (count($items) > 0) {
+            $current_items = $items;
+            $items = [];
+            foreach ($current_items as $item) {
+                $full_path = $src . '/' . $item;
+                if (is_file($full_path)) {
+                    copy($full_path, $dest . '/' . $item);
+                } elseif (is_dir($full_path)) {
+                    self :: mkdir($dest . '/' . $item);
+                    $new_items = self :: ls($full_path);
+                    $items = array_merge($items, $new_items);
+                    $total_items = array_merge($total_items, $new_items);
+                    unset($new_items);
+                }
+            }
+        }
+        if ($total_items) {
+            clearstatcache();
+        }
+
+        return $total_items;
+    }
+
+
 
 
 }
