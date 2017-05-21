@@ -105,6 +105,12 @@ class File
         return true;
     }
 
+    static function normalizeFilename($filename)
+    {
+        $filename = preg_replace("#\/{2,}#", "/", $filename);
+        $filename = preg_replace("#\/+$#", "", $filename);
+        return $filename;
+    }
 
 
 
