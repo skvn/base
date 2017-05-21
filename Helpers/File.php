@@ -10,8 +10,19 @@ class File
 
     public static function mkdir($dir, $mode = 0755, $recursive = true)
     {
-        if (!file_exists($dir)) {
+        if (!is_dir($dir)) {
             return mkdir($dir, $mode, $recursive);
+        }
+        return true;
+    }
+
+    public static function safeMkdir($dir, $mode = 0755, $recursive = true)
+    {
+        if (!is_dir($dir)) {
+            usleep(100000);
+            if (!is_dir($dir)) {
+                return mkdir($dir, $mode, $recursive);
+            }
         }
         return true;
     }
