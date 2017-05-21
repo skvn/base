@@ -8,6 +8,15 @@ use Skvn\Base\Exceptions\FilesystemException;
 class File
 {
 
+    public static function mkdir($dir, $mode = 0755, $recursive = true)
+    {
+        if (!file_exists($dir)) {
+            return mkdir($dir, $mode, $recursive);
+        }
+        return true;
+    }
+
+
     public static function ls($dir, $opts = []){
         $options = ['recursive' => false];
         if (empty($opts['paths'])) {
