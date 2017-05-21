@@ -8,8 +8,12 @@ use Skvn\Base\Exceptions\FilesystemException;
 class File
 {
 
-    public static function ls($dir){
-        return self :: findFiles($dir, ['recursive' => false]);
+    public static function ls($dir, $opts = []){
+        $options = ['recursive' => false];
+        if (empty($opts['paths'])) {
+            $options['basename'] = true;
+        }
+        return self :: findFiles($dir, $options);
     }
 
     public static function walkDir($path, $pattern)
@@ -48,7 +52,7 @@ class File
             }
             $path = $dir . DIRECTORY_SEPARATOR . $file;
             if (is_file($path)) {
-                $list[] = $path;
+                $list[] = !empty($options['basename']) ? basename($path) : $path;
             } elseif ($options['recursive'] ?? true) {
                 $list = array_merge($list, static::findFiles($path, $options));
             }
