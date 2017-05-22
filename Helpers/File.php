@@ -18,11 +18,8 @@ class File
 
     public static function safeMkdir($dir, $mode = 0755, $recursive = true)
     {
-        if (!is_dir($dir)) {
-            usleep(100000);
-            if (!is_dir($dir)) {
-                return mkdir($dir, $mode, $recursive);
-            }
+        if (!file_exists($dir)) {
+                return @mkdir($dir, $mode, $recursive);
         }
         return true;
     }
