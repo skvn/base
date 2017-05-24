@@ -34,6 +34,9 @@ class File
         if (empty($opts['paths'])) {
             $options['basename'] = true;
         }
+        if (isset($opts['folders'])) {
+            $options['folders'] = $opts['folders'];
+        }
         return self :: findFiles($dir, $options);
     }
 
@@ -74,8 +77,13 @@ class File
             $path = $dir . DIRECTORY_SEPARATOR . $file;
             if (is_file($path)) {
                 $list[] = !empty($options['basename']) ? basename($path) : $path;
-            } elseif ($options['recursive'] ?? true) {
-                $list = array_merge($list, static::findFiles($path, $options));
+            } else {
+                if (!empty($options['folders'])) {
+                    $list[] = !empty($options['basename']) ? basename($path) : $path;
+                }
+                if ($options['recursive'] ?? true) {
+                    $list = array_merge($list, static::findFiles($path, $options));
+                }
             }
         }
         closedir($handle);
@@ -138,7 +146,7 @@ class File
             return;
         }
         self :: mkdir($dest);
-        $items = self :: ls($src);
+        $items = self :: ls($src, ['folders' => true]);
 
         $total_items = $items;
         while (count($items) > 0) {
@@ -150,7 +158,9 @@ class File
                     copy($full_path, $dest . '/' . $item);
                 } elseif (is_dir($full_path)) {
                     self :: mkdir($dest . '/' . $item);
-                    $new_items = self :: ls($full_path);
+                    $new_items = array_map(function($d) use ($item){
+                        return $item . '/' . $d;
+                    }, self :: ls($full_path, ['folders' => true]));
                     $items = array_merge($items, $new_items);
                     $total_items = array_merge($total_items, $new_items);
                     unset($new_items);
