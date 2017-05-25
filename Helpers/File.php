@@ -40,7 +40,7 @@ class File
         return self :: findFiles($dir, $options);
     }
 
-    public static function walkDir($path, $pattern)
+    public static function rglob($path, $pattern)
     {
         $dh = opendir($path);
         while (($file = readdir($dh)) !== false)
@@ -48,7 +48,7 @@ class File
             if (substr($file, 0, 1) == '.') continue;
             $rfile = "{$path}/{$file}";
             if (is_dir($rfile)) {
-                foreach (self :: walkDir($rfile, $pattern) as $ret) {
+                foreach (self :: rglob($rfile, $pattern) as $ret) {
                     yield $ret;
                 }
             } else {
@@ -57,6 +57,7 @@ class File
         }
         closedir($dh);
     }
+
 
 
     public static function findFiles($dir, $options = [])
