@@ -82,6 +82,12 @@ class Str
         return basename(str_replace('\\', '/', $class));
     }
 
+    public static function xml2array($xml, $rootNode = null)
+    {
+        $arr = json_decode(json_encode(simplexml_load_string($xml)), true);
+        return !empty($rootNode) ? ($arr[$rootNode] ?? []) : $arr;
+    }
+
 
 
 }
