@@ -175,6 +175,28 @@ class File
         return $total_items;
     }
 
+    static function getMimeType($filename)
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+        return $mime;
+    }
+
+    static function getExtension($filename, $default = "png")
+    {
+        $info = pathinfo($filename);
+        return !empty($info['extension']) ? $info['extension'] : $default;
+    }
+
+    static function getHumanFilesize($bytes, $decimals = 2)
+    {
+        $sz = 'BKMGTP';
+        $factor = intval(floor((strlen($bytes) - 1) / 3));
+        $suffix = isset($sz[$factor]) ? $sz[$factor] : "";
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $suffix;
+    }
+
 
 
 
