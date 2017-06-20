@@ -16,7 +16,7 @@ class Exception extends PhpException
     function __construct($message, $details = [], $code = 0, $hide_calls_count = 0)
     {
         $this->original_message = $message;
-        $this->details = $details;
+        $this->params = $details;
 
         $this->backtrace = array_slice(debug_backtrace(), $hide_calls_count);
 
