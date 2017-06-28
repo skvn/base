@@ -117,9 +117,11 @@ class Config implements \ArrayAccess
     }
 
 
-    function loadInstanceConfig($filename)
+    function loadInstanceConfig($appName, $filename)
     {
         $this->config['__instance'] = parse_ini_file($filename);
+        $this->config['__instance']['app.name'] = $appName;
+        $this->set('app.name', $appName);
     }
 
     public function load($filename, $namespace = null)
