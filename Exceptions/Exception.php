@@ -56,9 +56,7 @@ class Exception extends PhpException
 
     function getParam($name)
     {
-        if (isset($this->params[$name])) {
-            return $this->params[$name];
-        }
+        return $this->params[$name] ?? null;
     }
 
     function getBacktrace() {
