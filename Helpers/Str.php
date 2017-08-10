@@ -7,6 +7,7 @@ class Str
     protected static $snake = [];
     protected static $studly = [];
     protected static $camel = [];
+    protected static $underscore = [];
 
 
     public static function pos($what, $where)
@@ -50,6 +51,23 @@ class Str
         }
 
         return static::$snake[$key] = $value;
+    }
+
+    public static function underscore($value)
+    {
+        $key = $value;
+
+        if (isset(static::$underscore[$key])) {
+            return static::$underscore[$key];
+        }
+
+        if (! ctype_lower($value)) {
+            $value = preg_replace('/\s+/u', '', $value);
+
+            $value = strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1_', $value));
+        }
+
+        return static::$underscore[$key] = $value;
     }
 
     public static function camel($value)
