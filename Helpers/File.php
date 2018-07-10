@@ -191,10 +191,10 @@ class File
 
     static function getHumanFilesize($bytes, $decimals = 2)
     {
-        $sz = 'BKMGTP';
+        $sz = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
         $factor = intval(floor((strlen($bytes) - 1) / 3));
-        $suffix = isset($sz[$factor]) ? $sz[$factor] : "";
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $suffix;
+        $suffix = $sz[$factor] ?? '';
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $suffix;
     }
 
 
