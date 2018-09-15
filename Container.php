@@ -38,7 +38,7 @@ abstract class Container implements \ArrayAccess
         return static :: getInstance();
     }
 
-    function make($class, $id = null)
+    function make($class, $id = null, $obj = null)
     {
         if (!array_key_exists($class, $this->instances)) {
             $this->instances[$class] = [];
@@ -46,7 +46,11 @@ abstract class Container implements \ArrayAccess
         $key = is_null($id) ? 'single' : $id;
         $instance = $this->instances[$class][$key] ?? null;
         if (!($instance instanceof $class)) {
-            $instance = $this->create($class, $id);
+            if (is_null($obj)) {
+                $instance = $this->create($class, $id);
+            } elseif ($obj instanceof $class) {
+                $instance = $obj;
+            }
             $this->instances[$class][$key] = $instance;
         }
         return $instance;
