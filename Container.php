@@ -38,17 +38,23 @@ abstract class Container implements \ArrayAccess
         return static :: getInstance();
     }
 
-    function make($class)
+    function make($class, $id = null)
     {
-        if (!isset($this->instances[$class])) {
-            $this->instances[$class] = $this->create($class);
+        if (!array_key_exists($class, $this->instances)) {
+            $this->instances[$class] = [];
         }
-        return $this->instances[$class];
+        $key = is_null($id) ? 'single' : $id;
+        $instance = $this->instances[$class][$key] ?? null;
+        if (!($instance instanceof $class)) {
+            $instance = $this->create($class, $id);
+            $this->instances[$class][$key] = $instance;
+        }
+        return $instance;
     }
 
-    function create($class)
+    function create($class, $id = null)
     {
-        return new $class;
+        return is_null($id) ? new $class : $class::create($id);
     }
 
     function alias($alias, $instance)
