@@ -58,7 +58,7 @@ abstract class Container implements \ArrayAccess
 
     function create($class, $id = null)
     {
-        return is_null($id) ? new $class : $class::create($id);
+        return is_null($id) ? new $class : $class::make($id);
     }
 
     function alias($alias, $instance)
