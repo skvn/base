@@ -45,7 +45,7 @@ abstract class Container implements \ArrayAccess
         }
         $key = is_null($id) ? 'single' : $id;
         $instance = $this->instances[$class][$key] ?? null;
-        if (!($instance instanceof $class)) {
+        if (!($instance instanceof $class) || ($obj instanceof $class)) {
             if (is_null($obj)) {
                 $instance = $this->create($class, $id);
             } elseif ($obj instanceof $class) {
