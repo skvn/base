@@ -13,17 +13,22 @@ class Facade
 
     protected static function getFacadeInstance()
     {
-        $name = static :: getFacadeTarget();
-        if (!isset(self :: $instances[$name])) {
-            self :: $instances[$name] = Container :: getInstance()->get($name);
+        $name = static::getFacadeTarget();
+        if (!isset(self::$instances[$name])) {
+            self::$instances[$name] = Container::getInstance()->get($name);
         }
-        return self :: $instances[$name];
+        return self::$instances[$name];
     }
 
     public static function __callStatic($method, $args)
     {
-        $obj = static :: getFacadeInstance();
+        $obj = static::getFacadeInstance();
         return $obj->$method(...$args);
+    }
+
+    public static function getTargetClass()
+    {
+        return get_class(static::getFacadeInstance());
     }
 
 }
