@@ -12,4 +12,11 @@ class Arr
         }
         return $result;
     }
+
+    public static function isAssoc(array $array)
+    {
+        $keys = array_keys($array);
+        return array_keys($keys) !== $keys;
+    }
+
 }
