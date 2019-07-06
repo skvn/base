@@ -5,7 +5,7 @@ namespace Skvn\Base\Helpers;
 class Date
 {
     const WEEKEND_IMPACT_NONE = 0;
-   	const WEEKEND_IMPACT_SUNDAYS = 1;
+   	const WEEKEND_IMPACT_SUNDAY = 1;
    	const WEEKEND_IMPACT_FULL = 2;
     const WEEKEND_IMPACT_FULL_MONDAY = 3;
     const WEEKEND_IMPACT_MONDAY = 4;
