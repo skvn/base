@@ -19,4 +19,18 @@ class Arr
         return array_keys($keys) !== $keys;
     }
 
+    public function sortBy(array $array, $column, $desc = false, $options = SORT_REGULAR)
+    {
+        $results = [];
+        foreach ($array as $key => $value) {
+            $results[$key] = $value[$column];
+        }
+        $desc ? arsort($results, $options) : asort($results, $options);
+        foreach (array_keys($results) as $key) {
+            $results[$key] = $array[$key];
+        }
+        return $results;
+    }
+
+
 }
