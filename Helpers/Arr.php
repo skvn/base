@@ -32,5 +32,24 @@ class Arr
         return $results;
     }
 
+    public static function totalsRow($array)
+    {
+        return array_reduce($array, function($cur, $item){
+            if (is_null($cur)) {
+                $cur = $item;
+            } else {
+                foreach ($cur as $k => $v) {
+                    if (is_numeric($v)) {
+                        if (array_key_exists($k, $item)) {
+                            $cur[$k] += $item[$k];
+                        }
+                    }
+                }
+            }
+            return $cur;
+        });
+    }
+
+
 
 }
