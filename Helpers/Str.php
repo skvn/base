@@ -117,6 +117,168 @@ class Str
         return $string;
     }
 
+    private static function chooseAmountWord($texts, $val, &$fem, $f)
+    {
+        $words = '';
+        $fl = 0;
+        if ($val >= 100) {
+            $words .= $texts['hang'][intval($val / 100)];
+            $val %= 100;
+        }
+        if ($val >= 20) {
+            $words .= $texts['des'][intval($val / 10)];
+            $val %= 10;
+            $fl = 1;
+        }
+        switch ($val) {
+            case 1:
+                $fem = 1;
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $fem = 2;
+                break;
+            default:
+                $fem = 3;
+                break;
+        }
+        if ($val) {
+            if ($val < 3 && $f > 0) {
+                if ($f >= 2) {
+                    $words .= $texts['_1_19'][$val];
+                } else {
+                    $words .= $texts['_1_2'][$val];
+                }
+            } else {
+                $words .= $texts['_1_19'][$val];
+            }
+        }
+        return $words;
+    }
+
+
+    public static function writtenRusAmount($amount)
+    {
+        $texts = [
+            '_1_2' => [
+                '1' => 'одна ',
+                '2' => 'две '
+            ],
+            '_1_19' => [
+                '1' => 'один ',
+                '2' => 'два ',
+                '3' => 'три ',
+                '4' => 'четыре ',
+                '5' => 'пять ',
+                '6' => 'шесть ',
+                '7' => 'семь ',
+                '8' => 'восемь ',
+                '9' => 'девять ',
+                '10' => 'десять ',
+                '11' => 'одиннацать ',
+                '12' => 'двенадцать ',
+                '13' => 'тринадцать ',
+                '14' => 'четырнадцать ',
+                '15' => 'пятнадцать ',
+                '16' => 'шестнадцать ',
+                '17' => 'семнадцать ',
+                '18' => 'восемнадцать ',
+                '19' => 'девятнадцать '
+            ],
+            'des' => [
+                '2' => 'двадцать ',
+                '3' => 'тридцать ',
+                '4' => 'сорок ',
+                '5' => 'пятьдесят ',
+                '6' => 'шестьдесят ',
+                '7' => 'семьдесят ',
+                '8' => 'восемдесят ',
+                '9' => 'девяносто '
+            ],
+            'hang' => [
+                '1' => 'сто ',
+                '2' => 'двести ',
+                '3' => 'триста ',
+                '4' => 'четыреста ',
+                '5' => 'пятьсот ',
+                '6' => 'шестьсот ',
+                '7' => 'семьсот ',
+                '8' => 'восемьсот ',
+                '9' => 'девятьсот '
+            ],
+            'namerub' => [
+                '1' => 'рубль ',
+                '2' => 'рубля ',
+                '3' => 'рублей '
+            ],
+            'nametho' => [
+                '1' => 'тысяча ',
+                '2' => 'тысячи ',
+                '3' => 'тысяч '
+            ],
+            'namemil' => [
+                '1' => 'миллион ',
+                '2' => 'миллиона ',
+                '3' => 'миллионов '
+            ],
+            'namemrd' => [
+                '1' => 'миллиард ',
+                '2' => 'миллиарда ',
+                '3' => 'миллиардов '
+            ],
+            'kopeek' => [
+                '1' => 'копейка ',
+                '2' => 'копейки ',
+                '3' => 'копеек '
+            ]
+        ];
+
+        $s = ' ';
+        $s1 = ' ';
+        $s2 = ' ';
+        $kop = intval(( intval($amount) * 100 - intval($amount) * 100));
+        $amount = intval($amount);
+        if ($amount >= 1000000000) {
+            $many = 0;
+            $s1 = static::chooseAmountWord($texts, intval($amount / 1000000000), $many, 3);
+            $s .= $s1 . $texts['namemrd'][$many];
+            $amount %= 1000000000;
+        }
+        if ($amount >= 1000000) {
+            $many = 0;
+            $s1 = static::chooseAmountWord($texts, intval($amount / 1000000), $many, 2);
+            $s .= $s1 . $texts['namemil'][$many];
+            $amount %= 1000000;
+            if ($amount == 0) {
+                $s .= 'рублей ';
+            }
+        }
+        if ($amount >= 1000) {
+            $many = 0;
+            $s1 = static::chooseAmountWord($texts, intval($amount / 1000), $many, 1);
+            $s .= $s1 . $texts['nametho'][$many];
+            $amount %= 1000;
+            if ($amount == 0) {
+                $s .= 'рублей ';
+            }
+        }
+        if ($amount != 0) {
+            $many = 0;
+            $s1 = static::chooseAmountWord($texts, $amount, $many, 0);
+            $s .= $s1 . $texts['namerub'][$many];
+        }
+        if ($kop > 0) {
+            $many = 0;
+            static::chooseAmountWord($texts, $kop, $many, 1);
+            $s .= $kop . ' ' . $texts['kopeek'][$many];
+        } else {
+            $s .= ' 00 копеек';
+        }
+
+        return $s;
+    }
+
 
 
 
