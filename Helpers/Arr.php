@@ -19,7 +19,7 @@ class Arr
         return array_keys($keys) !== $keys;
     }
 
-    public function sortBy(array $array, $column, $desc = false, $options = SORT_REGULAR)
+    public static function sortBy(array $array, $column, $desc = false, $options = SORT_REGULAR)
     {
         $results = [];
         foreach ($array as $key => $value) {
