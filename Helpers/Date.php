@@ -27,6 +27,16 @@ class Date
         'Декабрь'
     ];
 
+    public static $weekdayNames = [
+        1 => ['short' => 'пн', 'full' => 'Понедельник'],
+        2 => ['short' => 'вт', 'full' => 'Вторник'],
+        3 => ['short' => 'ср', 'full' => 'Среда'],
+        4 => ['short' => 'чт', 'full' => 'Четверг'],
+        5 => ['short' => 'пт', 'full' => 'Пятница'],
+        6 => ['short' => 'сб', 'full' => 'Суббота'],
+        7 => ['short' => 'вс', 'full' => 'Воскресенье'],
+    ];
+
     public static function addWorkDays($cur, $offset, $wi = self::WEEKEND_IMPACT_FULL)
     {
         if (!is_numeric($cur)) {
@@ -116,6 +126,11 @@ class Date
             $list[$i] = $i;
         }
         return $list;
+    }
+
+    public static function weekdayName($ts, $form = 'short', $default = null)
+    {
+        return static::$weekdayNames[date('N', $ts)][$form] ?? $default;
     }
 
 }
