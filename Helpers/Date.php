@@ -12,19 +12,18 @@ class Date
     const WEEKEND_IMPACT_SUNDAY_MONDAY = 5;
 
     public static $monthNames = [
-        'нет месяца',
-        'Январь',
-        'Февраль',
-        'Март',
-        'Апрель',
-        'Май',
-        'Июнь',
-        'Июль',
-        'Август',
-        'Сентябрь',
-        'Октябрь',
-        'Ноябрь',
-        'Декабрь'
+        1 => ['i' => 'январь', 'r' => 'января'],
+        2 => ['i' => 'февраль', 'r' => 'февраля'],
+        3 => ['i' => 'март', 'r' => 'марта'],
+        4 => ['i' => 'апрель', 'r' => 'апреля'],
+        5 => ['i' => 'май', 'r' => 'мая'],
+        6 => ['i' => 'июнь', 'r' => 'июня'],
+        7 => ['i' => 'июль', 'r' => 'июля'],
+        8 => ['i' => 'август', 'r' => 'августа'],
+        9 => ['i' => 'сентябрь', 'r' => 'сентября'],
+        10 => ['i' => 'октябрь', 'r' => 'октября'],
+        11 => ['i' => 'ноябрь', 'r' => 'ноября'],
+        12 => ['i' => 'декабрь', 'r' => 'декабря'],
     ];
 
     public static $weekdayNames = [
@@ -86,7 +85,7 @@ class Date
                     continue;
                 }
                 $ts = strtotime('+ ' . $months . ' months', $from);
-                $list[date('Y-m', $ts)] = date('Y', $ts) . "' " . static::$monthNames[date('n', $ts)];
+                $list[date('Y-m', $ts)] = date('Y', $ts) . "' " . mb_convert_case(static::$monthNames[date('n', $ts)]['i'], MB_CASE_TITLE, 'UTF-8');
                 $months++;
             }
         }
@@ -100,7 +99,7 @@ class Date
     {
         $list = [];
         for ($i = 1; $i <= 12; $i++) {
-            $list[$i] = static::$monthNames[$i];
+            $list[$i] = mb_convert_case(static::$monthNames[$i]['i'], MB_CASE_TITLE, 'UTF-8');
         }
         return $list;
     }
@@ -130,7 +129,20 @@ class Date
 
     public static function weekdayName($ts, $form = 'short', $default = null)
     {
-        return static::$weekdayNames[date('N', $ts)][$form] ?? $default;
+        if (!is_numeric($ts)) {
+            $ts = strtotime($ts);
+        }
+        $idx = $ts < 8 ? $ts : date('N', $ts);
+        return static::$weekdayNames[$idx][$form] ?? $default;
+    }
+
+    public static function monthName($ts, $form = 'i', $default = null)
+    {
+        if (!is_numeric($ts)) {
+            $ts = strtotime($ts);
+        }
+        $idx = $ts < 13 ? $ts : date('n', $ts);
+        return static::$monthNames[$idx][$form] ?? $default;
     }
 
 }
