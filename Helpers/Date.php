@@ -5,8 +5,8 @@ namespace Skvn\Base\Helpers;
 class Date
 {
     const WEEKEND_IMPACT_NONE = 0;
-   	const WEEKEND_IMPACT_SUNDAY = 1;
-   	const WEEKEND_IMPACT_FULL = 2;
+    const WEEKEND_IMPACT_SUNDAY = 1;
+    const WEEKEND_IMPACT_FULL = 2;
     const WEEKEND_IMPACT_FULL_MONDAY = 3;
     const WEEKEND_IMPACT_MONDAY = 4;
     const WEEKEND_IMPACT_SUNDAY_MONDAY = 5;
@@ -26,6 +26,38 @@ class Date
         'Ноябрь',
         'Декабрь'
     ];
+
+    public static function nearestWorkDay($cur, $offset, $wi = self::WEEKEND_IMPACT_FULL)
+    {
+        if (!is_numeric($cur)) {
+            $cur = strtotime($cur);
+        }
+        $sign = $offset > 0 ? '+' : '-';
+        $offset = abs($offset);
+        $ts = strtotime($sign . $offset . ' days', $cur);
+        while (static::isDayOff($ts, $wi)) {
+            $ts = strtotime($sign . '1 day', $ts);
+        }
+        return $ts;
+    }
+
+    public static function isDayOff($ts, $wi = self::WEEKEND_IMPACT_FULL)
+    {
+        $wd = date('N', $ts);
+        switch ($wi) {
+            case self::WEEKEND_IMPACT_FULL;
+                return in_array($wd, ['6', '7']);
+            case self::WEEKEND_IMPACT_SUNDAY;
+                return in_array($wd, ['7']);
+            case self::WEEKEND_IMPACT_FULL_MONDAY;
+                return in_array($wd, ['1', '6', '7']);
+            case self::WEEKEND_IMPACT_MONDAY;
+                return in_array($wd, ['1']);
+            case self::WEEKEND_IMPACT_SUNDAY_MONDAY;
+                return in_array($wd, ['1', '7']);
+        }
+        return false;
+    }
 
     public static function listYearMonths($from, $to, $reverse = false)
     {
