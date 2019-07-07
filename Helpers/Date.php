@@ -27,16 +27,20 @@ class Date
         'Декабрь'
     ];
 
-    public static function nearestWorkDay($cur, $offset, $wi = self::WEEKEND_IMPACT_FULL)
+    public static function addWorkDays($cur, $offset, $wi = self::WEEKEND_IMPACT_FULL)
     {
         if (!is_numeric($cur)) {
             $cur = strtotime($cur);
         }
+        $offset = intval($offset);
         $sign = $offset > 0 ? '+' : '-';
         $offset = abs($offset);
-        $ts = strtotime($sign . $offset . ' days', $cur);
-        while (static::isDayOff($ts, $wi)) {
+        $ts = $cur;
+        while ($offset > 0) {
             $ts = strtotime($sign . '1 day', $ts);
+            if (!static::isDayOff($ts, $wi)) {
+                $offset--;
+            }
         }
         return $ts;
     }
