@@ -279,6 +279,19 @@ class Str
         return $s;
     }
 
+    public static function cachePrefix($hash, $args = [])
+    {
+        $level = $args['level'] ?? 2;
+        $parts = [];
+        for ($i=0; $i<$level; $i++) {
+            $part = substr($hash, $i*2, 2);
+            foreach ($args['replaces'] ?? [] as $from => $to) {
+                $part = str_replace($from, $to, $part);
+            }
+            $parts[] = $part;
+        }
+        return implode('/', $parts);
+    }
 
 
 
