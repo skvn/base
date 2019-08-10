@@ -36,6 +36,89 @@ class Date
         7 => ['short' => 'вс', 'full' => 'Воскресенье'],
     ];
 
+    public static function format($ts = 0, $dateFormat = 'dd mm yyyy', $txtMonth = true, $txtToday = false, $smartYear = false)
+    {
+        if (empty($ts)) {
+            $ts = time();
+        }
+        if (!is_numeric($ts)) {
+            $ts = strtotime($ts);
+        }
+        if (!$ts) {
+            return false;
+        }
+        switch ($dateFormat) {
+            case 'simple':
+                $txtMonth = true;
+                $txtToday = false;
+                $dateFormat = 'dd mm';
+            break;
+            case 'list':
+                $txtMonth = false;
+                $txtToday = false;
+                $dateFormat = 'dd.mm.yyyy';
+                $smartYear = 1;
+            break;
+            case 'full':
+                $txtMonth = true;
+                $txtToday = false;
+                $dateFormat = 'dd mm yyyy';
+            break;
+        }
+
+        $time = date('H:i:s', $ts);
+        $year = date('Y', $ts);
+        $month = date('m', $ts);
+        $day = date('d', $ts);
+        $hour = date('H', $ts);
+        $min = date('i', $ts);
+        $second = date('s', $ts);
+
+        if ($txtToday) {
+            if (date('Ymd') == $year . $month . $day) {
+                $day = 'сегодня';
+                $month = '';
+                $year = '';
+            } elseif (date('Ymd', strtotime('yesterday')) == $year . $month . $day) {
+                $day = 'вчера';
+                $month = '';
+                $year = '';
+            } elseif (date('Ymd', strtotime('tomorrow')) == $year . $month . $day) {
+                $day = 'завтра';
+                $month = '';
+                $year = '';
+            }
+        }
+        if ($month != '') {
+            $day = intval($day);
+        }
+        if ($txtMonth && $month != '') {
+            $month = static::$monthNames[intval($month)]['r'] ?? '';
+        }
+        if ($month != '') {
+            if (!substr_count($dateFormat, 'mm')) {
+                $month = intval($month);
+            }
+        }
+        $numDigY = substr_count($dateFormat, 'y');
+
+        $returnDate = $dateFormat;
+        if ($smartYear && $year == date('Y')) {
+            $year = '';
+            $returnDate = preg_replace('/\.?(y)+/', '', $returnDate);
+        }
+        $year = substr($year, -$numDigY, 4);
+        $returnDate = preg_replace('/(y)+/', $year, $returnDate);
+        $returnDate = preg_replace('/dd|d/', $day, $returnDate);
+        $returnDate = preg_replace('/mm|m/', $month, $returnDate);
+
+        $returnDate = str_replace('H', $hour, $returnDate);
+        $returnDate = str_replace('M', $min, $returnDate);
+
+        return $returnDate;
+    }
+
+
     public static function addWorkDays($cur, $offset, $wi = self::WEEKEND_IMPACT_FULL)
     {
         if (!is_numeric($cur)) {
