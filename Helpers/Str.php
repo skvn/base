@@ -293,6 +293,26 @@ class Str
         return implode('/', $parts);
     }
 
+    public static function nform($num, $var1, $var2, $var3)
+    {
+        if ($num >= 10 && $num < 20) {
+            return $var3;
+        }
+        $num = strval($num);
+        $int = intval(substr($num, -1, strlen($num)));
+        switch ($int) {
+            case 1:
+                return $var1;
+            case 2:
+            case 3:
+            case 4:
+                return $var2;
+            default:
+                return $var3;
+        }
+    }
+
+
 
 
 }
