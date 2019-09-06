@@ -312,7 +312,54 @@ class Str
         }
     }
 
+    public static function parsePhpDoc($comment)
+    {
+        return [
+            'summary' => static::parsePhpDocSummary($comment),
+            'detail' => static::parsePhpDocDetail($comment),
+            'tags' => static::parsePhpDocTags($comment)
+        ];
+    }
 
+    public static function parsePhpDocTags($comment)
+    {
+        $comment = "@description \n" . strtr(trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))), "\r", '');
+        $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
+        $tags = [];
+        foreach ($parts as $part) {
+            if (preg_match('/^(\w+)(.*)/ms', trim($part), $matches)) {
+                $name = $matches[1];
+                if (!isset($tags[$name])) {
+                    $tags[$name] = trim($matches[2]);
+                } elseif (is_array($tags[$name])) {
+                    $tags[$name][] = trim($matches[2]);
+                } else {
+                    $tags[$name] = [$tags[$name], trim($matches[2])];
+                }
+            }
+        }
+        return $tags;
+    }
 
+    public static function parsePhpDocSummary($comment)
+    {
+        $docLines = preg_split('~\R~u', $comment);
+        if (isset($docLines[1])) {
+            return trim($docLines[1], "\t *");
+        }
+        return '';
+    }
+
+    public static function parsePhpDocDetail($comment)
+    {
+        $comment = strtr(trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))), "\r", '');
+        if (preg_match('/^\s*@\w+/m', $comment, $matches, PREG_OFFSET_CAPTURE)) {
+            $comment = trim(substr($comment, 0, $matches[0][1]));
+        }
+        if ($comment !== '') {
+            return rtrim($comment);
+        }
+        return '';
+    }
 
 }
