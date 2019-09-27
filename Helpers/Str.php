@@ -362,7 +362,7 @@ class Str
         return '';
     }
 
-    function transliterate($input, $url_escape = true, $tolower=false)
+    public static function transliterate($input, $url_escape = true, $tolower=false)
     {
         $arrRus = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м',
                         'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь',
