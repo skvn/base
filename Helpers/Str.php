@@ -15,9 +15,9 @@ class Str
         return strpos($where, $what);
     }
 
-    public static function count($what, $where, $offset = null, $length = null)
+    public static function count($what, $where)
     {
-        return substr_count($where, $what, $offset, $length);
+        return substr_count($where, $what);
     }
 
     public static function contains($what, $where)
