@@ -15,6 +15,11 @@ class Str
         return strpos($where, $what);
     }
 
+    public static function count($what, $where, $offset = null, $length = null)
+    {
+        return substr_count($where, $what, $offset, $length);
+    }
+
     public static function contains($what, $where)
     {
         foreach ((array) $what as $pattern) {
