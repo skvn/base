@@ -122,6 +122,19 @@ class Str
         return $string;
     }
 
+    public static function uuid()
+    {
+        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X',
+                       random_int(0, 65535),
+                       random_int(0, 65535),
+                       random_int(0, 65535),
+                       random_int(16384, 20479),
+                       random_int(32768, 49151),
+                       random_int(0, 65535),
+                       random_int(0, 65535),
+                       random_int(0, 65535));
+    }
+
     private static function chooseAmountWord($texts, $val, &$fem, $f)
     {
         $words = '';
