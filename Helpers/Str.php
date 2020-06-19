@@ -388,11 +388,11 @@ class Str
                         'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М',
                         'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ь',
                         'Ы', 'Ъ', 'Э', 'Ю', 'Я'];
-        $arrEng = ['a', 'b', 'v', 'g', 'd', 'e', 'jo', 'zh', 'z', 'i', 'y', 'k', 'l', 'm',
-                        'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'kh', 'c', 'ch', 'sh', 'sch', '',
+        $arrEng = ['a', 'b', 'v', 'g', 'd', 'e', 'yo', 'zh', 'z', 'i', 'y', 'k', 'l', 'm',
+                        'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'kh', 'cz', 'ch', 'sh', 'shh', '',
                         'y', '', 'e', 'yu', 'ya',
-                        'A', 'B', 'V', 'G', 'D', 'E', 'JO', 'ZH', 'Z', 'I', 'Y', 'K', 'L', 'M',
-                        'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'KH', 'C', 'CH', 'SH', 'SCH', '',
+                        'A', 'B', 'V', 'G', 'D', 'E', 'YO', 'ZH', 'Z', 'I', 'Y', 'K', 'L', 'M',
+                        'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'KH', 'CZ', 'CH', 'SH', 'SHH', '',
                         'Y', '', 'E', 'YU', 'YA'];
 
         $input = str_replace(' ', '-', $input);
@@ -402,7 +402,7 @@ class Str
         $result = str_replace($arrRus, $arrEng, $input);
         $result = preg_replace("#[^_-a-zA-Z0-9]#i", '', $result);
         if ($url_escape) {
-            $result = str_replace([' ', '/', '\\'], '_', $result);
+            $result = str_replace([' ', '/', '\\', ','], '-', $result);
             $result = urlencode($result);
         }
 
