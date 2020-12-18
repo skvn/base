@@ -63,21 +63,17 @@ class Exception extends PhpException
         return $this->backtrace;
     }
 
-    function getNiceTraceAsString() {
-        return $this->getBacktraceObject()->toString();
-    }
-
-    function getBacktraceObject() {
-        return new Backtrace($this->backtrace);
-    }
-
     function toNiceString($without_backtrace = false) {
-        $string = get_class($this) . ': ' . $this->getOriginalMessage() . PHP_EOL;
+        $message = $this->getOriginalMessage();
+        if (!is_string($message)) {
+            $message = json_encode($message);
+        }
+        $string = get_class($this) . ': ' . $message . PHP_EOL;
         if ($this->params) {
-            $string .= 'Additional params: ' . PHP_EOL . Backtrace :: var_export($this->params) . PHP_EOL;
+            $string .= 'Additional params: ' . PHP_EOL . Backtrace::var_export($this->params) . PHP_EOL;
         }
         if (!$without_backtrace) {
-            $string .= 'Backtrace: ' . PHP_EOL . $this->getBacktraceObject()->toString();
+            $string .= 'Backtrace: ' . PHP_EOL . $this->getTraceAsString();
         }
         return $string;
     }
