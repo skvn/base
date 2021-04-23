@@ -380,7 +380,7 @@ class Str
         return '';
     }
 
-    public static function transliterate($input, $url_escape = true, $tolower=false)
+    public static function transliterate($input, $url_escape = true, $tolower=false, $keepPunctuation = false)
     {
         $arrRus = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м',
                         'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь',
@@ -391,16 +391,22 @@ class Str
         $arrEng = ['a', 'b', 'v', 'g', 'd', 'e', 'yo', 'zh', 'z', 'i', 'y', 'k', 'l', 'm',
                         'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'kh', 'cz', 'ch', 'sh', 'shh', '',
                         'y', '', 'e', 'yu', 'ya',
-                        'A', 'B', 'V', 'G', 'D', 'E', 'YO', 'ZH', 'Z', 'I', 'Y', 'K', 'L', 'M',
-                        'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'KH', 'CZ', 'CH', 'SH', 'SHH', '',
-                        'Y', '', 'E', 'YU', 'YA'];
+                        'A', 'B', 'V', 'G', 'D', 'E', 'Yo', 'Zh', 'Z', 'I', 'Y', 'K', 'L', 'M',
+                        'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'Kh', 'Cz', 'Ch', 'Sh', 'Shh', '',
+                        'Y', '', 'E', 'Yu', 'Ya'];
 
-        $input = str_replace(' ', '-', $input);
+        if (!$keepPunctuation) {
+            $input = str_replace(' ', '-', $input);
+        }
         if ($tolower) {
             $input = mb_strtolower($input, 'UTF-8');
         }
         $result = str_replace($arrRus, $arrEng, $input);
-        $result = preg_replace("#[^_-a-zA-Z0-9]#i", '', $result);
+
+        if (!$keepPunctuation) {
+            $result = preg_replace("#[^_-a-zA-Z0-9]#i", '', $result);
+        }
+
         if ($url_escape) {
             $result = str_replace([' ', '/', '\\', ','], '-', $result);
             $result = urlencode($result);
