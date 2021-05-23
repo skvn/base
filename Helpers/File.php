@@ -19,7 +19,10 @@ class File
     public static function safeMkdir($dir, $mode = 0755, $recursive = true)
     {
         if (!file_exists($dir)) {
-                return @mkdir($dir, $mode, $recursive);
+            $old = error_reporting(0);
+            $res = mkdir($dir, $mode, $recursive);
+            error_reporting($old);
+            return $res;
         }
         return true;
     }
