@@ -4,22 +4,25 @@ namespace Skvn\Base\Traits;
 
 trait ArrayOrObjectAccessImpl
 {
-
+    #[\ReturnTypeWillChange]
     function offsetExists($offset)
     {
         return !is_null($this->get($offset));
     }
 
+    #[\ReturnTypeWillChange]
     function offsetGet($offset)
     {
         return $this->get($offset);
     }
 
+    #[\ReturnTypeWillChange]
     function offsetSet($offset, $value)
     {
         return $this->set($offset, $value);
     }
 
+    #[\ReturnTypeWillChange]
     function offsetUnset($offset)
     {
         return false;

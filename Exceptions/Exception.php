@@ -9,8 +9,6 @@ class Exception extends PhpException
 {
     protected $original_message;
     protected $params = [];
-    protected $file;
-    protected $line;
     protected $backtrace;
 
     function __construct($message, $details = [], $code = 0, $hide_calls_count = 0)
