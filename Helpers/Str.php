@@ -12,7 +12,7 @@ class Str
 
     public static function pos($what, $where)
     {
-        return strpos($where, $what);
+        return strpos($where ?? '', $what);
     }
 
     public static function count($what, $where)
