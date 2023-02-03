@@ -23,7 +23,7 @@ class Str
     public static function contains($what, $where)
     {
         foreach ((array) $what as $pattern) {
-            if ($pattern != '' && mb_strpos($where, $pattern) !== false) {
+            if ($pattern != '' && mb_strpos($where ?? '', $pattern) !== false) {
                 return true;
             }
         }
