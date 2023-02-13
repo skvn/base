@@ -396,10 +396,10 @@ class Str
                         'Y', '', 'E', 'Yu', 'Ya'];
 
         if (!$keepPunctuation) {
-            $input = str_replace(' ', '-', $input);
+            $input = str_replace(' ', '-', $input ?? '');
         }
         if ($tolower) {
-            $input = mb_strtolower($input, 'UTF-8');
+            $input = mb_strtolower($input ?? '', 'UTF-8');
         }
         $result = str_replace($arrRus, $arrEng, $input);
 
