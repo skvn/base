@@ -213,7 +213,7 @@ class Date
     public static function weekdayName($ts, $form = 'short', $default = null)
     {
         if (!is_numeric($ts)) {
-            $ts = strtotime($ts);
+            $ts = strtotime($ts ?? 'now');
         }
         $idx = $ts < 8 ? $ts : date('N', $ts);
         return static::$weekdayNames[$idx][$form] ?? $default;
