@@ -178,6 +178,9 @@ class Str
 
     public static function writtenRusAmount($amount)
     {
+        $minus = $amount < 0;
+        $amount = abs($amount);
+
         $texts = [
             '_1_2' => [
                 '1' => 'одна ',
@@ -294,7 +297,7 @@ class Str
             $s .= ' 00 копеек';
         }
 
-        return $s;
+        return ($minus ? 'минус ' : '') . $s;
     }
 
     public static function cachePrefix($hash, $args = [])
