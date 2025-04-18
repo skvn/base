@@ -112,7 +112,7 @@ class Date
         $returnDate = preg_replace('/(y)+/', $year, $returnDate);
         $returnDate = preg_replace('/dd|d/', $day, $returnDate);
         $returnDate = preg_replace('/mm|m/', $month, $returnDate);
-        $returnDate = preg_replace('/FF/', $month, $returnDate);
+        $returnDate = preg_replace('/FF/', $monthI, $returnDate);
 
         $returnDate = str_replace('H', $hour, $returnDate);
         $returnDate = str_replace('M', $min, $returnDate);
