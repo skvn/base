@@ -93,8 +93,8 @@ class Date
             $day = intval($day);
         }
         if ($txtMonth && $month != '') {
-            $month = static::$monthNames[intval($month)]['r'] ?? '';
             $monthI = static::$monthNames[intval($month)]['i'] ?? '';
+            $month = static::$monthNames[intval($month)]['r'] ?? '';
         }
         if ($month != '') {
             if (!substr_count($dateFormat, 'mm')) {
