@@ -94,6 +94,7 @@ class Date
         }
         if ($txtMonth && $month != '') {
             $month = static::$monthNames[intval($month)]['r'] ?? '';
+            $monthI = static::$monthNames[intval($month)]['i'] ?? '';
         }
         if ($month != '') {
             if (!substr_count($dateFormat, 'mm')) {
@@ -111,6 +112,7 @@ class Date
         $returnDate = preg_replace('/(y)+/', $year, $returnDate);
         $returnDate = preg_replace('/dd|d/', $day, $returnDate);
         $returnDate = preg_replace('/mm|m/', $month, $returnDate);
+        $returnDate = preg_replace('/FF/', $month, $returnDate);
 
         $returnDate = str_replace('H', $hour, $returnDate);
         $returnDate = str_replace('M', $min, $returnDate);
